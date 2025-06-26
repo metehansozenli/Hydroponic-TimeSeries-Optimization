@@ -1,0 +1,17 @@
+{
+  "optimal_temp": 26.86,
+  "optimal_ph": 7.4,
+  "optimal_ec": 3.8,
+  "optimal_growth": 50.0,
+  "optimal_temp_rate": 26.86,
+  "optimal_ph_rate": 7.4,
+  "optimal_ec_rate": 3.8,
+  "optimal_growth_rate": 1.2,
+  "bounds": {
+    "h2o_temp_C": [19, 27],
+    "pH": [5.4, 7.4],
+    "EC": [1.6, 3.8]
+  },
+  "time_steps": 4,
+  "feature_cols_env": ["h2o_temp_C", "pH", "EC"]
+}

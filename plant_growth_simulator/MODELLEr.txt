@@ -1,0 +1,78 @@
+Başarı Metrikleri:
+LSTM -> MAE: 5.34, RMSE: 7.02, R2: 0.79
+RNN  -> MAE: 4.89, RMSE: 6.66, R2: 0.82
+
+random_seed=16
+random_seed=13
+
+n_features = X_train_seq.shape[2]
+model = Sequential()
+model.add(LSTM(96, input_shape=(time_steps, n_features), activation='tanh', return_sequences=True))
+model.add(Dropout(0.2))
+model.add(LSTM(64, input_shape=(time_steps, n_features), activation='tanh', return_sequences=False))
+model.add(Dense(32))
+model.add(Dense(1))
+model.compile(optimizer='adam', loss='mse')
+
+# 8b. RNN (SimpleRNN) MODELİ
+rnn_model = Sequential()
+rnn_model.add(SimpleRNN(96, input_shape=(time_steps, n_features), activation='tanh', return_sequences=True))
+rnn_model.add(Dropout(0.2))
+rnn_model.add(SimpleRNN(64, input_shape=(time_steps, n_features), activation='tanh', return_sequences=False))
+rnn_model.add(Dense(32))
+rnn_model.add(Dense(1))
+rnn_model.compile(optimizer='adam', loss='mse')
+
+# 13. SONUÇ GÖRSELLEŞTİRME
+plt.figure(figsize=(12, 6))
+plt.plot(Y_test_inv[410:468], label='Gerçek', color='black')
+plt.plot(y_pred_inv[410:468], label='LSTM', alpha=0.8)
+plt.plot(y_rnn_pred_inv[410:468], label='RNN', alpha=0.8)
+plt.legend()
+plt.title(f'LSTM, RNN, ELM ile Bitki Boyu Tahmini (Window Size: {time_steps})')
+plt.xlabel('Zaman')
+plt.ylabel('Bitki Boyu (cm)')
+plt.tight_layout()
+plt.show()
+
+-----------------------------------------------
+Başarı Metrikleri:
+LSTM -> MAE: 4.90, RMSE: 6.60, R2: 0.82
+RNN  -> MAE: 5.05, RMSE: 6.74, R2: 0.81
+
+random_seed=16
+random_seed=13
+
+n_features = X_train_seq.shape[2]
+model = Sequential()
+model.add(LSTM(96, input_shape=(time_steps, n_features), activation='tanh', return_sequences=True))
+model.add(LSTM(64, input_shape=(time_steps, n_features), activation='tanh', return_sequences=False))
+model.add(Dropout(0.2))
+model.add(Dense(32))
+model.add(Dense(1))
+model.compile(optimizer='adam', loss='mse')
+
+# 8b. RNN (SimpleRNN) MODELİ
+rnn_model = Sequential()
+rnn_model.add(SimpleRNN(96, input_shape=(time_steps, n_features), activation='tanh', return_sequences=True))
+rnn_model.add(SimpleRNN(64, input_shape=(time_steps, n_features), activation='tanh', return_sequences=False))
+rnn_model.add(Dropout(0.2))
+rnn_model.add(Dense(32))
+rnn_model.add(Dense(1))
+rnn_model.compile(optimizer='adam', loss='mse')
+history = model.fit(
+    X_train_scaled, y_train_scaled,
+    validation_split=0.1,
+    epochs=200,
+    batch_size=32,
+    callbacks=[es],
+    verbose=2
+)
+
+rnn_history = rnn_model.fit(
+    X_train_scaled, y_train_scaled,
+    validation_split=0.1,
+    epochs=200,
+    batch_size=32,
+    callbacks=[es],
+    verbose=2

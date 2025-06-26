@@ -1,0 +1,741 @@
+/* HydroGrow AI - Hidroponik Bitki Büyüme Simülatörü CSS */
+
+:root {
+    /* Hidroponik Renk Paleti */
+    --hydro-primary: #4CAF50;
+    --hydro-secondary: #2196F3;
+    --hydro-accent: #FF9800;
+    --hydro-success: #8BC34A;
+    --hydro-warning: #FFC107;
+    --hydro-danger: #F44336;
+    --hydro-info: #00BCD4;
+    
+    /* Beslenme Çözeltisi Renkleri */
+    --nutrient-blue: #1976D2;
+    --nutrient-green: #388E3C;
+    --nutrient-orange: #F57C00;
+    --nutrient-purple: #7B1FA2;
+    
+    /* Arka Plan ve Yüzey Renkleri */
+    --hydro-bg-primary: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #667eea 100%);
+    --hydro-bg-card: rgba(255, 255, 255, 0.95);
+    --hydro-bg-overlay: rgba(255, 255, 255, 0.1);
+    
+    /* Gölge ve Efektler */
+    --hydro-shadow-light: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --hydro-shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.15);
+    --hydro-shadow-heavy: 0 12px 40px rgba(0, 0, 0, 0.2);
+    
+    /* Border Radius */
+    --hydro-radius-small: 10px;
+    --hydro-radius-medium: 15px;
+    --hydro-radius-large: 20px;
+    --hydro-radius-xl: 25px;
+    
+    /* Geçiş Efektleri */
+    --hydro-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --hydro-transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Genel Stiller */
+body {
+    background: var(--hydro-bg-primary);
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow-x: hidden;
+}
+
+/* Ana Konteyner */
+.container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Hidroponik Kartlar */
+.hydro-card {
+    background: var(--hydro-bg-card);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--hydro-bg-overlay);
+    border-radius: var(--hydro-radius-large);
+    box-shadow: var(--hydro-shadow-medium);
+    overflow: hidden;
+    transition: var(--hydro-transition);
+    position: relative;
+}
+
+.hydro-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--hydro-primary), var(--hydro-secondary), var(--hydro-accent));
+    z-index: 1;
+}
+
+.hydro-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--hydro-shadow-heavy);
+}
+
+/* Kart Başlıkları */
+.hydro-header, .hydro-control, .hydro-results, .hydro-assessment {
+    position: relative;
+    padding: 25px;
+    color: white;
+    overflow: hidden;
+}
+
+.hydro-header {
+    background: linear-gradient(135deg, var(--hydro-primary), var(--hydro-success));
+}
+
+.hydro-control {
+    background: linear-gradient(135deg, var(--hydro-secondary), var(--nutrient-blue));
+}
+
+.hydro-results {
+    background: linear-gradient(135deg, var(--hydro-accent), var(--nutrient-orange));
+}
+
+.hydro-assessment {
+    background: linear-gradient(135deg, var(--nutrient-purple), #9C27B0);
+}
+
+/* Parlama Efekti */
+.hydro-header::before,
+.hydro-control::before,
+.hydro-results::before,
+.hydro-assessment::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+    transform: rotate(45deg);
+    animation: shimmer 4s infinite;
+}
+
+/* Parametre Kontrolleri */
+.parameter-label {
+    font-weight: 700;
+    color: var(--nutrient-green);
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.hydro-icon {
+    margin-right: 12px;
+    color: var(--hydro-secondary);
+    font-size: 1.3em;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.optimal-badge {
+    background: linear-gradient(45deg, var(--hydro-primary), var(--hydro-success));
+    color: white;
+    border: none;
+    border-radius: var(--hydro-radius-large);
+    padding: 8px 16px;
+    font-size: 0.9em;
+    font-weight: 700;
+    box-shadow: var(--hydro-shadow-light);
+    transition: var(--hydro-transition);
+}
+
+.optimal-badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+/* Form Elemanları */
+.form-range {
+    height: 10px;
+    background: linear-gradient(to right, #e3f2fd, var(--hydro-secondary));
+    border-radius: var(--hydro-radius-small);
+    outline: none;
+    transition: var(--hydro-transition);
+}
+
+.form-range::-webkit-slider-thumb {
+    appearance: none;
+    background: linear-gradient(45deg, var(--hydro-primary), var(--hydro-secondary));
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: var(--hydro-transition);
+    border: 2px solid white;
+}
+
+.form-range::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+}
+
+.form-range::-moz-range-thumb {
+    background: linear-gradient(45deg, var(--hydro-primary), var(--hydro-secondary));
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 2px solid white;
+}
+
+/* Butonlar */
+.btn-hydro {
+    background: linear-gradient(135deg, var(--hydro-primary), var(--hydro-success));
+    border: none;
+    border-radius: var(--hydro-radius-xl);
+    padding: 16px 40px;
+    font-weight: 700;
+    color: white;
+    font-size: 1.1em;
+    transition: var(--hydro-transition);
+    box-shadow: var(--hydro-shadow-light);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-hydro::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-hydro:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(76, 175, 80, 0.4);
+    color: white;
+}
+
+.btn-hydro:hover::before {
+    left: 100%;
+}
+
+/* Büyüme Grafiği */
+.hydro-chart-container {
+    background: var(--hydro-bg-card);
+    border-radius: var(--hydro-radius-large);
+    padding: 30px;
+    box-shadow: var(--hydro-shadow-medium);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--hydro-bg-overlay);
+}
+
+.chart-header {
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--hydro-bg-overlay);
+}
+
+.hydro-chart {
+    border-radius: var(--hydro-radius-medium);
+    box-shadow: var(--hydro-shadow-light);
+    transition: var(--hydro-transition);
+}
+
+.hydro-chart:hover {
+    transform: scale(1.02);
+    box-shadow: var(--hydro-shadow-medium);
+}
+
+/* Metrik Kartları */
+.metric-card {
+    background: linear-gradient(135deg, var(--hydro-bg-card), rgba(240, 248, 255, 0.8));
+    border-radius: var(--hydro-radius-medium);
+    padding: 25px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--hydro-shadow-light);
+    transition: var(--hydro-transition);
+    border: 1px solid var(--hydro-bg-overlay);
+    position: relative;
+    overflow: hidden;
+}
+
+.metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--hydro-primary), var(--hydro-secondary));
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--hydro-shadow-medium);
+}
+
+.metric-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.metric-icon {
+    font-size: 2em;
+    margin-right: 12px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.metric-title {
+    font-weight: 700;
+    color: var(--nutrient-green);
+    font-size: 1.1em;
+}
+
+.metric-value {
+    font-size: 2.5em;
+    font-weight: 900;
+    color: var(--nutrient-blue);
+    margin-bottom: 8px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.metric-subtitle {
+    color: #666;
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+/* Hidroponik Yetiştirme Odası */
+.hydro-chamber {
+    background: linear-gradient(135deg, var(--hydro-bg-card), rgba(227, 242, 253, 0.9));
+    border-radius: var(--hydro-radius-large);
+    padding: 25px;
+    box-shadow: var(--hydro-shadow-medium);
+    backdrop-filter: blur(15px);
+    position: relative;
+    overflow: hidden;
+    border: 2px solid var(--hydro-bg-overlay);
+}
+
+.chamber-header {
+    text-align: center;
+    margin-bottom: 25px;
+    color: var(--nutrient-green);
+    font-weight: 700;
+    font-size: 1.2em;
+}
+
+.plant-animation-wrapper {
+    position: relative;
+    height: 380px;
+    background: linear-gradient(
+        to bottom, 
+        #e3f2fd 0%, 
+        #f3e5f5 30%, 
+        #e8f5e8 60%, 
+        #f1f8e9 100%
+    );
+    border-radius: var(--hydro-radius-medium);
+    overflow: hidden;
+    border: 3px solid rgba(76, 175, 80, 0.3);
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Besin Göstergeleri */
+.nutrient-indicators {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+}
+
+.indicator {
+    background: var(--hydro-bg-card);
+    border-radius: var(--hydro-radius-large);
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+    font-weight: 700;
+    box-shadow: var(--hydro-shadow-light);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--hydro-bg-overlay);
+    transition: var(--hydro-transition);
+}
+
+.indicator:hover {
+    transform: scale(1.05);
+}
+
+.indicator.temp { 
+    color: var(--hydro-danger);
+    border-left: 4px solid var(--hydro-danger);
+}
+
+.indicator.ph { 
+    color: var(--nutrient-purple);
+    border-left: 4px solid var(--nutrient-purple);
+}
+
+.indicator.ec { 
+    color: var(--hydro-secondary);
+    border-left: 4px solid var(--hydro-secondary);
+}
+
+/* Bitki Animasyonu */
+.plant-animation {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    transition: height 3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 5;
+}
+
+/* Hidroponik Taban */
+.hydro-base {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(135deg, var(--hydro-secondary), var(--nutrient-blue));
+    border-radius: 0 0 var(--hydro-radius-medium) var(--hydro-radius-medium);
+    box-shadow: inset 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.nutrient-flow-animation {
+    position: absolute;
+    top: 15px;
+    left: 30px;
+    right: 30px;
+    height: 6px;
+    background: linear-gradient(90deg, var(--hydro-primary), var(--hydro-success), var(--hydro-primary));
+    background-size: 200% 100%;
+    border-radius: 3px;
+    animation: nutrient-flow 3s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
+}
+
+.roots-system {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 30px;
+    background: radial-gradient(ellipse, rgba(139, 195, 74, 0.7), transparent);
+    border-radius: 50%;
+    animation: pulse-roots 2s ease-in-out infinite;
+}
+
+/* Büyüme Cetveli */
+.growth-ruler {
+    position: absolute;
+    left: 20px;
+    bottom: 60px;
+    top: 20px;
+    width: 35px;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.05) 100%);
+    border-right: 3px solid #666;
+    border-radius: var(--hydro-radius-small);
+}
+
+.ruler-marks {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    width: 100%;
+    background-image: repeating-linear-gradient(
+        to top,
+        transparent 0px,
+        transparent 23px,
+        #666 24px,
+        #666 25px
+    );
+}
+
+.height-indicator {
+    position: absolute;
+    right: -90px;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--hydro-primary), var(--hydro-success));
+    color: white;
+    padding: 6px 12px;
+    border-radius: var(--hydro-radius-medium);
+    font-size: 0.85em;
+    font-weight: 700;
+    transition: bottom 3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--hydro-shadow-light);
+    white-space: nowrap;
+}
+
+/* Performans Özeti */
+.performance-summary {
+    background: linear-gradient(135deg, var(--hydro-bg-card), rgba(255,255,255,0.8));
+    border: none;
+    border-radius: var(--hydro-radius-large);
+    padding: 30px;
+    backdrop-filter: blur(15px);
+    box-shadow: var(--hydro-shadow-medium);
+    border: 1px solid var(--hydro-bg-overlay);
+}
+
+.performance-icon {
+    background: linear-gradient(135deg, var(--hydro-secondary), var(--nutrient-blue));
+    color: white;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--hydro-shadow-light);
+    transition: var(--hydro-transition);
+}
+
+.performance-icon:hover {
+    transform: scale(1.1);
+    box-shadow: var(--hydro-shadow-medium);
+}
+
+.score-circle {
+    background: linear-gradient(135deg, var(--hydro-primary), var(--hydro-success));
+    color: white;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.2em;
+    box-shadow: var(--hydro-shadow-light);
+    transition: var(--hydro-transition);
+}
+
+.score-circle:hover {
+    transform: scale(1.1);
+    box-shadow: var(--hydro-shadow-medium);
+}
+
+/* Yükleme Animasyonu */
+.hydro-spinner {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.spinner-grow {
+    animation-duration: 1.5s;
+}
+
+/* Hoş Geldin Alanı */
+.hydro-welcome-container {
+    padding: 40px;
+    text-align: center;
+}
+
+.hydro-system-illustration {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 30px;
+}
+
+.hydro-pipes {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+.pipe {
+    background: linear-gradient(45deg, var(--hydro-secondary), #64B5F6);
+    border-radius: var(--hydro-radius-small);
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+}
+
+.pipe.horizontal {
+    width: 140px;
+    height: 10px;
+    position: absolute;
+    top: 25px;
+    left: -70px;
+}
+
+.pipe.vertical {
+    width: 10px;
+    height: 80px;
+    position: absolute;
+    top: -15px;
+    left: -5px;
+}
+
+.nutrient-flow {
+    width: 16px;
+    height: 16px;
+    background: var(--hydro-primary);
+    border-radius: 50%;
+    position: absolute;
+    top: 17px;
+    left: -8px;
+    animation: flow 2.5s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
+}
+
+.welcome-features {
+    margin: 30px 0;
+}
+
+/* Animasyonlar */
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
+}
+
+@keyframes flow {
+    0% { transform: translateX(-70px); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateX(70px); opacity: 0; }
+}
+
+@keyframes nutrient-flow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse-roots {
+    0%, 100% { opacity: 0.7; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+}
+
+/* Responsive Tasarım */
+@media (max-width: 992px) {
+    .main-title {
+        font-size: 2.5rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+    
+    .plant-animation-wrapper {
+        height: 300px;
+    }
+    
+    .metric-card {
+        margin-bottom: 20px;
+    }
+    
+    .performance-summary {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 2rem;
+    }
+    
+    .plant-animation-wrapper {
+        height: 250px;
+    }
+    
+    .hydro-chamber {
+        padding: 15px;
+    }
+    
+    .nutrient-indicators {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .indicator {
+        font-size: 0.8em;
+        padding: 8px 12px;
+    }
+    
+    .metric-value {
+        font-size: 2rem;
+    }
+}
+
+/* Erişilebilirlik */
+.btn-hydro:focus,
+.form-range:focus {
+    outline: 2px solid var(--hydro-primary);
+    outline-offset: 2px;
+}
+
+/* Özel Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--hydro-primary), var(--hydro-secondary));
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--hydro-secondary), var(--hydro-primary));
+}
+
+/* Print Stil */
+@media print {
+    body {
+        background: white !important;
+    }
+    
+    .hydro-card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+    }
+}
+
+/* Yüksek Kontrast Mod */
+@media (prefers-contrast: high) {
+    .hydro-card {
+        border: 2px solid #000;
+    }
+    
+    .btn-hydro {
+        border: 2px solid #000;
+    }
+}
+
+/* Hareket Azaltma */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
